@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using PizzaStore.DB;
 
 namespace PizzaStore.Models
 {

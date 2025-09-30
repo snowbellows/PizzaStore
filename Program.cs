@@ -34,8 +34,13 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/pizzas", async (PizzaDB db) => await db.Pizzas.ToListAsync());
 
+app.MapPost("/pizzas", async (PizzaDB db, Pizza pizza) => {
+    await db.Pizzas.AddAsync(pizza);
+    await db.SaveChangesAsync();
+    return Results.Created($"/pizza/{pizza.Id}", pizza);
+});
+
 // app.MapGet("/pizzas/{id}", (int id) => PizzaDB.GetPizza(id));
-// app.MapPost("/pizzas", (Pizza pizza) => PizzaDB.CreatePizza(pizza));
 // app.MapPut("/pizzas", (Pizza pizza) => PizzaDB.UpdatePizza(pizza));
 // app.MapDelete("/pizzas/{id}", (int id) => PizzaDB.RemovePizza(id));
 

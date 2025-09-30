@@ -16,6 +16,8 @@ dotnet ef migrations add <MIGRATION_NAME>
 
 #### Applying migrations
 
+Always do this as part of project setup before starting the development server
+
 ```bash
 dotnet ef database update
 ```

@@ -34,7 +34,8 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/pizzas", async (PizzaDB db) => await db.Pizzas.ToListAsync());
 
-app.MapPost("/pizzas", async (PizzaDB db, Pizza pizza) => {
+app.MapPost("/pizzas", async (PizzaDB db, Pizza pizza) => 
+{
     await db.Pizzas.AddAsync(pizza);
     await db.SaveChangesAsync();
     return Results.Created($"/pizza/{pizza.Id}", pizza);
@@ -42,7 +43,16 @@ app.MapPost("/pizzas", async (PizzaDB db, Pizza pizza) => {
 
 app.MapGet("/pizzas/{id}", async (PizzaDB db, int id) => await db.Pizzas.FindAsync(id));
 
-// app.MapPut("/pizzas", (Pizza pizza) => PizzaDB.UpdatePizza(pizza));
+app.MapPut("/pizzas/{id}", async (PizzaDB db, Pizza updatepizza, int id) => 
+{
+    var pizza = await db.Pizzas.FindAsync(id);
+    if (pizza is null) return Results.NotFound();
+    pizza.Name = updatepizza.Name;
+    pizza.Description = updatepizza.Description;
+    await db.SaveChangesAsync();
+    return Results.NoContent();
+});
+
 // app.MapDelete("/pizzas/{id}", (int id) => PizzaDB.RemovePizza(id));
 
 app.Run();

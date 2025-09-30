@@ -1,9 +1,13 @@
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
+using PizzaStore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddDbContext<PizzaDB>(options => options.UseInMemoryDatabase("items"));
 
 if (builder.Environment.IsDevelopment())
 {
@@ -28,10 +32,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/pizzas", async (PizzaDB db) => await db.Pizzas.ToListAsync());
 
 // app.MapGet("/pizzas/{id}", (int id) => PizzaDB.GetPizza(id));
-// app.MapGet("/pizzas", () => PizzaDB.GetPizzas());
 // app.MapPost("/pizzas", (Pizza pizza) => PizzaDB.CreatePizza(pizza));
 // app.MapPut("/pizzas", (Pizza pizza) => PizzaDB.UpdatePizza(pizza));
 // app.MapDelete("/pizzas/{id}", (int id) => PizzaDB.RemovePizza(id));
